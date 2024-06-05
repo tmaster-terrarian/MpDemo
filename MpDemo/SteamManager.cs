@@ -6,38 +6,40 @@ namespace MpDemo;
 
 public class SteamManager
 {
+    public const uint steam_appid = 480;
+
     private static CallResult<NumberOfCurrentPlayers_t> m_NumberOfCurrentPlayers;
     private static CallResult<LeaderboardFindResult_t> m_callResultFindLeaderboard;
     private static Callback<PersonaStateChange_t> m_PersonaStateChange;
     private static Callback<UserStatsReceived_t> m_UserStatsReceived;
 
-    private SteamManager() {}
-
     public static bool IsSteamRunning { get; set; } = false;
 
-    public static bool StartSteam()
+    private SteamManager() {}
+
+    public static bool Init()
     {
         try
         {
-            if (!SteamAPI.Init())
+            if(!SteamAPI.Init())
             {
                 Console.WriteLine("SteamAPI.Init() failed!");
                 return false;
             }
         }
-        catch (DllNotFoundException e) // We check this here as it will be the first instance of it.
+        catch(DllNotFoundException e) // We check this here as it will be the first instance of it.
         {
             Console.WriteLine(e);
             return false;
         }
 
-        if (!Packsize.Test())
+        if(!Packsize.Test())
         {
             Console.WriteLine("You're using the wrong Steamworks.NET Assembly for this platform!");
             return false;
         }
 
-        if (!DllCheck.Test())
+        if(!DllCheck.Test())
         {
             Console.WriteLine("You're using the wrong dlls for this platform!");
             return false;
